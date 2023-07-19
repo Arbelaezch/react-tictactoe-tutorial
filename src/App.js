@@ -40,6 +40,8 @@ export default function Board() {
       {/* Closures: Defining onSquareClick as a Prop in Square allows devs to handle the behaviour from an outer function in the parent Component. */}
       <div className="board-row">
         <Square value={squares[0]} onSquareClick={() => handleClick(0)}/>
+        {/* Use an Arrow Function to specify handleClick to only run onClick, now that you are calling handleClick(i) when passing as a prop. */}
+        {/* When the square is clicked, the code after the => arrow will run. */}
         <Square value={squares[1]} onSquareClick={() => handleClick(1)}/>
         <Square value={squares[2]} onSquareClick={() => handleClick(2)}/>
       </div>
