@@ -1,7 +1,25 @@
 import React from 'react';
+import { useState } from 'react';
 
-function Square({ value }) {
-  return <button className="square">{value}</button>;
+function Square() {
+  // Each Square component has its own state, in the form of a value variable that maintains its state between renders.
+  // value is the variable and setValue is the function that updates it.
+  // In this case, value starts as null and is updated to 'X' when the button is clicked.
+  // When you call a set function on a component, React automatically updates the child components inside of it too.
+  const [value, setValue] = useState(null);
+
+  function handleClick() {
+    setValue('X');
+  }
+
+  return (
+    <button 
+      className="square"
+      onClick={handleClick}
+      >
+        {value}
+    </button>
+  );
 }
 
 
@@ -9,19 +27,19 @@ export default function Board() {
   return (
     <React.Fragment>
       <div className="board-row">
-        <Square value="1" />
-        <Square value="2" />
-        <Square value="3" />
+        <Square />
+        <Square />
+        <Square />
       </div>
       <div className="board-row">
-        <Square value="4" />
-        <Square value="5" />
-        <Square value="6" />
+        <Square />
+        <Square />
+        <Square />
       </div>
       <div className="board-row">
-        <Square value="7" />
-        <Square value="8" />
-        <Square value="9" />
+        <Square />
+        <Square />
+        <Square />
       </div>
     </React.Fragment>
   );
