@@ -1,34 +1,31 @@
 import React from 'react';
 import { useState } from 'react';
 
-function Square({value, onSquareClick}) {
-  
-  // Each Square component can have its own state, in the form of a value variable that maintains its state between renders.
-  // value is the variable and setValue is the function that updates it.
-  // In this case, value starts as null and is updated to 'X' when the button is clicked.
-  // When you call a set function on a component, React automatically updates the child components inside of it too.
-  // const [value, setValue] = useState(null);
 
-  // function handleClick() {
-  //   setValue('X');
-  // }
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
 
   return (
-    <button 
-      className="square"
-      onClick={onSquareClick}
-      >
-        {value}
-    </button>
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{/*TODO*/}</ol>
+      </div>
+    </div>
   );
 }
 
 
-export default function Board() {
-  // useState sets an initial state. In this case, it's an array of 9 nulls.
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  const [xIsNext, setXIsNext] = useState(true);
-
+function Board({ xIsNext, squares, onPlay }) {
 
   function handleClick(i) {
     if (squares[i] || calculateWinner(squares)) {
@@ -41,29 +38,9 @@ export default function Board() {
     } else {
       nextSquares[i] = "O";
     }
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext);
+    onPlay(nextSquares);
   }
 
-  function calculateWinner(squares) {
-    const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6]
-    ];
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
-      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        return squares[a];
-      }
-    }
-    return null;
-  }
 
   const winner = calculateWinner(squares);
   let status;
@@ -76,7 +53,7 @@ export default function Board() {
   return (
     <React.Fragment>
       <div className="status">{status}</div>
-      
+
       {/* Each Square value prop is initialized with the Board's squares State. */}
       {/* Closures: Defining onSquareClick as a Prop in Square allows devs to handle the behaviour from an outer function in the parent Component. */}
       <div className="board-row">
@@ -98,4 +75,36 @@ export default function Board() {
       </div>
     </React.Fragment>
   );
+}
+
+
+function Square({value, onSquareClick}) {
+  return (
+    <button 
+      className="square"
+      onClick={onSquareClick}
+      >
+        {value}
+    </button>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
 }
